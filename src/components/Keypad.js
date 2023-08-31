@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setProgress, increaseScore } from "../store/word";
 import { useNavigate } from "react-router-dom";
 
-function KeyPad() {
+function KeyPad(props) {
   const dispatch = useDispatch();
   const secretWord = useSelector((state) => state.word.secretWord);
   const userProgress = useSelector((state) => state.word.userProgress);
@@ -26,7 +26,9 @@ function KeyPad() {
     guess += userProgress[key];
   }
   if (answer === guess) {
-    navigate("/win");
+    if (guess !== ""){
+      navigate("/win");
+    }
   }
 
   // this function is called when a key button is pressed
@@ -57,7 +59,7 @@ function KeyPad() {
   };
 
   return (
-    <div>
+    <div className={props.isVisible}>
       <Button
         fluid
         className="keypad_button"

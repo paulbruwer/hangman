@@ -40,10 +40,16 @@ export const wordSlice = createSlice({
     increaseScore: (state) => {
       state.score += 1;
     },
+
+    resetScore: (state) => {
+      state.score = 1;
+      state.secretWord = {};
+      state.userProgress = {};
+    }
   },
 });
 
-export const { generateSecretWord, setProgress, increaseScore } =
+export const { generateSecretWord, setProgress, increaseScore, resetScore } =
   wordSlice.actions;
 
 export default wordSlice.reducer;

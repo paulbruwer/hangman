@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-function WordBar() {
+function WordBar(props) {
   const wordObj = useSelector((state) => state.word.userProgress);
 
   const handelWordBar = () => {
@@ -13,7 +13,7 @@ function WordBar() {
   };
 
   return (
-    <div>
+    <div className={props.isVisible}>
       <p style={{ fontSize: "5vw", fontFamily: "sans-serif" }}>
         {handelWordBar()}
       </p>

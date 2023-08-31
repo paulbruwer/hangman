@@ -1,16 +1,21 @@
-import React from "react";
+import {React,useState} from "react";
 import WordBar from "./WordBar";
 import KeyPad from "./Keypad";
 import Gallows from "./Gallows";
 import { Container, Row, Col } from "react-bootstrap";
 import dictionaryText from "../dictionary.txt";
-import { generateSecretWord, setProgress } from "../store/word";
+import { generateSecretWord, setProgress, resetScore } from "../store/word";
 import { Button } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, } from "react-router-dom";
 
 function Landing() {
   const dispatch = useDispatch();
+
+  // this state will be set to the props of various components to determine their visibility when certain
+  // event occur
+  const [elementVisibility, setElementVisibility] = useState(" invisible");
+  const [buttonVisibility, setButtonVisibility] = useState("");
 
   // here we use an async function to read a text file containing a library of words
   // these words are loaded and set to an array
@@ -48,8 +53,10 @@ function Landing() {
     }
   };
 
+  // This button will reload all components on the landing page and reset all state to initial
   const newGame = () => {
     window.location.reload();
+    dispatch(resetScore());
   };
 
   return (
@@ -59,22 +66,31 @@ function Landing() {
           <h1 style={{ color: "blue", fontSize: "8vw", fontFamily: "fantasy" }}>
             HANGMAN
           </h1>
-          <Button onClick={newGame}>New Game</Button>
+          <Button 
+            onClick={() => {
+              newGame();
+            }}
+          >
+            New Game
+          </Button>
           <Button
+            className={buttonVisibility}
             style={{ marginTop: "5px" }}
-            onClick={(e) => {
+            onClick={() => {
+              dispatch(resetScore());
+              setButtonVisibility(" invisible")
               readLibrary();
-              e.target.className += " invisible";
+              setElementVisibility("");
             }}
           >
             Generate Word
           </Button>
           <Col>
-            <Gallows />
+            <Gallows isVisible={elementVisibility}/>
           </Col>
           <Col>
-            <WordBar />
-            <KeyPad />
+            <WordBar isVisible={elementVisibility}/>
+            <KeyPad isVisible={elementVisibility}/>
           </Col>
           <Link to="/help"><Button>Help</Button></Link>
         </Row>
